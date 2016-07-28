@@ -7,6 +7,7 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);
+router.get('/track/:trackId', controller.getTrackLocations);
 router.post('/', controller.create);
 router.put('/:trackId/:userId', controller.addLocation);
 router.patch('/:id', controller.update);

@@ -34,3 +34,9 @@ export function addLocationValidation(req, res) {
 
   return handleError(req, res);
 }
+
+export function getTrackLocationsValidation(req, res) {
+  req.checkParams('trackId', "Please provide a valid trackId").notEmpty().isMongoId();
+
+  return handleError(req, res);
+}

@@ -14,6 +14,11 @@ class NavbarController {
     this.status = {
      isOpen : false
     };
+
+    this.menu = [{
+      state: 'tracks',
+      title: 'Tracks'
+    }];
    }
 
    changeLanguage(langKey) {

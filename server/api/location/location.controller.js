@@ -66,8 +66,6 @@ function handleError(res, statusCode) {
 }
 
 
-
-
 // Gets a single Location from the DB
 export function show(req, res) {
   return Location.findById(req.params.id).exec()
@@ -177,3 +175,24 @@ export function index(req, res) {
     .catch(handleError(res));
 }
 
+// for a specific trackId get all the locations - off all users
+export function getTrackLocations(req, res) {
+  if (!validation.getTrackLocationsValidation(req, res))
+    return;
+
+  var fields = {
+    _id : 0,
+    userId : 0,
+    trackId : 0,
+    __v : 0,
+    'route._id' : 0
+  };
+
+  return Location.find({
+    trackId : req.params.trackId
+  })
+    .select(fields)
+    .exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
