@@ -13,6 +13,7 @@ var LocationSchema = new mongoose.Schema({
   userId: String,
   currentLocation: [Number],
   currentStreetName : String,
+  currentTimestamp : Date,
   distance : Number,   // m
   avgSpeed : Number   // m/s
 });

@@ -16,7 +16,6 @@ class TracksComponent {
       .then(response => {
         this.track = response.data;
         this.socket.socket.on('location:update:' + this.trackId, (data) => {
-          alert('Am primit un update' + data.toString());
           console.log(data);
           this.update(data);
         });
@@ -35,6 +34,17 @@ class TracksComponent {
   updateTrack(data) {
     // TODO Update the track array for the specific user
 
+    var toPush = {
+      loc : data.currentLocation,
+      timestamp : data.currentTimestamp
+    };
+
+
+    for (let tr of this.track) {
+      if (tr.username == data.username) {
+        tr.route.push(toPush);
+      }
+    }
   }
 
   update(data) {

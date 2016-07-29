@@ -25,7 +25,7 @@ for (var e in events) {
 
 function essentialData(doc) {
   var esDoc = {};
-  var esProp = ['trackId', 'username', 'distance', 'avgSpeed', 'currentStreetName', 'currentLocation'];
+  var esProp = ['trackId', 'username', 'distance', 'avgSpeed', 'currentStreetName', 'currentLocation', 'currentTimestamp'];
   for (var i = 0; i < esProp.length; ++i) {
     var prop = esProp[i];
     esDoc[prop] = doc[prop];
@@ -35,11 +35,7 @@ function essentialData(doc) {
 
 function emitEvent(event) {
   return function(doc) {
-    // ar trebui prelucrat doc !!!!
     console.log("Dau emit cu ", essentialData(doc));
-
-    //LocationEvents.emit(event + ':' + doc._id, doc);
-    //LocationEvents.emit(event, doc);
     LocationEvents.emit(event + ':' + doc.trackId, essentialData(doc));
   }
 }

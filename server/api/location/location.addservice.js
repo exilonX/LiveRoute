@@ -70,32 +70,36 @@ function buildGeolibCoords(osrmCoords) {
 // 4. Compute the total distance by adding to the total distance
 // the distance between the last two coordinates
 export function computeMetrics(location, info, cb) {
-  let start = buildGeolibCoords(location.currentLocation);
-  let end = buildGeolibCoords(info.location);
+  if (location.route.length > 0) {
+    let start = buildGeolibCoords(location.currentLocation);
+    let end = buildGeolibCoords(info.location);
 
-  let distance = geolib.getDistance(start, end);
-  console.log("Geolib distance ", start, end, distance);
-  let totalDistance = location.distance + distance;
-  let t0 = (new Date(location.route[0].timestamp)).getTime();
-  let totalTime = (new Date(info.timestamp)).getTime() - t0; // time in seconds
+    let distance = geolib.getDistance(start, end);
+    console.log("Geolib distance ", start, end, distance);
+    let totalDistance = location.distance + distance;
+
+    let t0 = (new Date(location.route[0].timestamp)).getTime();
+    let totalTime = (new Date(info.timestamp)).getTime() - t0; // time in seconds
 
 
-  let avgSpeed = 0;
-  if (totalDistance > 0)
-    avgSpeed = totalDistance / (1.0 * totalTime); // avg speed in m/s
+    let avgSpeed = 0;
+    if (totalDistance > 0)
+      avgSpeed = totalDistance / (1.0 * totalTime); // avg speed in m/s
 
-  avgSpeed = 3.6 * avgSpeed; // avg speed in km/h
+    avgSpeed = 3.6 * avgSpeed; // avg speed in km/h
 
-  location.distance = totalDistance;
-  location.avgSpeed = avgSpeed;
+    location.distance = totalDistance;
+    location.avgSpeed = avgSpeed;
+  }
 
-  cb(null, location, info);
+  return cb(null, location, info);
 }
 
 
 // 5. Update the document with the new information
 
 export function updateLocation(location, info, cb) {
+  console.log(location);
   location.route.push({
     loc : info.location,
     timestamp : info.timestamp
@@ -103,6 +107,7 @@ export function updateLocation(location, info, cb) {
 
   location.currentLocation = info.location;
   location.currentStreetName = info.streetName;
+  location.currentTimestamp = info.timestamp;
 
   location.save(cb);
 }
