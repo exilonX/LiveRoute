@@ -11,20 +11,19 @@ class NavbarController {
     this.translate = $translate;
     this.languages = ['en', 'ro'];
     this.menu = [
-        {
-            state : "liveroute",
-            title : "Live route"
-        }
+      {
+        state : "liveroute",
+        title : "Live route"
+      },
+      {
+        state: 'tracks',
+        title: 'Tracks'
+      }
     ];
 
     this.status = {
      isOpen : false
     };
-
-    this.menu = [{
-      state: 'tracks',
-      title: 'Tracks'
-    }];
    }
 
    changeLanguage(langKey) {
