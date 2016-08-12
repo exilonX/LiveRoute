@@ -133,3 +133,8 @@ locale-language.json -
 }
 
 In a html file {{'TRANSLATION_ID' | translate}}
+
+### Running the location generator script
+
+Location of the script server/scripts/generate.js
+The server should be running, a client should be open in the tracks tab, the list of locations should increase when running the script

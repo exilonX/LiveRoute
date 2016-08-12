@@ -19,6 +19,8 @@ import passport from 'passport';
 import session from 'express-session';
 import connectMongo from 'connect-mongo';
 import mongoose from 'mongoose';
+import expressValidator from 'express-validator';
+
 var MongoStore = connectMongo(session);
 
 export default function(app) {
@@ -41,6 +43,7 @@ export default function(app) {
   app.set('view engine', 'html');
   app.use(compression());
   app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(expressValidator());
   app.use(bodyParser.json());
   app.use(methodOverride());
   app.use(cookieParser());
@@ -65,9 +68,9 @@ export default function(app) {
    */
   if (env !== 'test' && !process.env.SAUCE_USERNAME) {
     app.use(lusca({
-      csrf: {
-        angular: true
-      },
+      //csrf: {
+      //  angular: true
+      //},
       xframe: 'SAMEORIGIN',
       hsts: {
         maxAge: 31536000, //1 year, in seconds

@@ -7,7 +7,7 @@
     constructor($http, $scope, socket) {
       this.$http = $http;
       this.socket = socket;
-      this.awesomeThings = [];
+      this.tracks = [];
 
       $scope.$on('$destroy', function() {
         socket.unsyncUpdates('thing');
@@ -15,24 +15,33 @@
     }
 
     $onInit() {
-      this.$http.get('/api/things')
+      this.$http.get('/api/locations')
         .then(response => {
-          this.awesomeThings = response.data;
-          this.socket.syncUpdates('thing', this.awesomeThings);
+          this.tracks = response.data;
+          //this.socket.syncUpdates('thing', this.awesomeThings);
         });
     }
 
     addThing() {
       if (this.newThing) {
-        this.$http.post('/api/things', {
-          name: this.newThing
+        this.$http.post('/api/locations', {
+          name: this.newThing,
+          info : this.newThing,
+          users : [{
+            username : 'ana',
+            userId : 1
+          },
+            {
+              username : 'banana',
+              userId : 2
+            }]
         });
         this.newThing = '';
       }
     }
 
     deleteThing(thing) {
-      this.$http.delete('/api/things/' + thing._id);
+      this.$http.delete('/api/locations/' + thing._id);
     }
   }
 

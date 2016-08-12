@@ -9,6 +9,10 @@ module.exports = {
     uri: 'mongodb://localhost/liveroute-dev'
   },
 
+  osrm : {
+    url : 'http://localhost:5000'
+  },
+
   // Seed database on startup
   seedDB: true
 
