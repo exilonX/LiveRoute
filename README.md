@@ -138,3 +138,55 @@ In a html file {{'TRANSLATION_ID' | translate}}
 
 Location of the script server/scripts/generate.js
 The server should be running, a client should be open in the tracks tab, the list of locations should increase when running the script
+
+
+### HTTP Requests to add a Location to a Track
+
+* Creare track:
+
+Method: POST
+
+URL : http://localhost:9000/api/tracks
+
+Headers: 
+     Content-Type : application/json
+     
+Body: raw
+{
+    "trackName" : "Ana are mere",
+    "trackInfo" : "Track ana are mere",
+    "public" : true,
+    "users" : [
+        {
+            "username" : "user1",
+            "userId" : 100
+        },
+        {
+            "username" : "user2",
+            "userId" : 200
+        },
+        {
+            "username" : "user3",
+            "userId" : 300
+        }],
+    "ownerName" : "user1",
+    "ownerId" : 100
+}
+
+
+* Send Location
+
+Method: PUT
+
+URL : http://localhost:9000/api/locations/:trackId/:userId
+
+Headers: 
+     Content-Type : application/json
+     
+Body: raw
+{
+    "lat" : 26.06526,
+    "long" : 44.42038,
+    "time" : "2016-06-30T15:35:46.750Z",
+    "username" : "user1"
+}
