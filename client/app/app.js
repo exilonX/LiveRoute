@@ -2,7 +2,7 @@
 
 angular.module('liverouteApp', ['liverouteApp.auth', 'liverouteApp.admin', 'liverouteApp.constants',
     'ngCookies', 'ngResource', 'ngSanitize', 'btford.socket-io', 'ui.router', 'ui.bootstrap',
-    'validation.match', 'pascalprecht.translate'
+    'validation.match', 'pascalprecht.translate', 'ngMap'
   ])
   .config(function($urlRouterProvider, $locationProvider, $translateProvider) {
     $urlRouterProvider.otherwise('/');

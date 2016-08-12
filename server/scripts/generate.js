@@ -13,7 +13,7 @@ for (var i = 0; i < routePoints.length; ++i) {
       };
 
       request({
-        url : 'http://localhost:9000/api/locations/5774f31b43365a7c749769c1/100',
+        url : 'http://localhost:9000/api/locations/57adaf6369b90f8347981c0f/100',
         method : 'PUT',
         json : obj
       }, function(err, data) {
