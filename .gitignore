@@ -1,10 +1,21 @@
-node_modules
-public
-.tmp
-.sass-cache
-.idea
-client/bower_components
-dist
-/server/config/local.env.js
-npm-debug.log
-coverage
+# Live route webapp nodejs + angular
+liverouteweb/node_modules
+liverouteweb/public
+liverouteweb/.tmp
+liverouteweb/.sass-cache
+liverouteweb/.idea
+liverouteweb/client/bower_components
+liverouteweb/dist
+liverouteweb/server/config/local.env.js
+liverouteweb/npm-debug.log
+liverouteweb/coverage
+
+# Tracker android app
+Tracker/.idea
+Tracker/.gradle
+Tracker/local.properties
+Tracker/.idea/workspace.xml
+Tracker/.idea/libraries
+Tracker/.DS_Store
+Tracker/build
+Tracker/captures
