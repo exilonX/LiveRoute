@@ -10,6 +10,12 @@ class NavbarController {
     this.getCurrentUser = Auth.getCurrentUser;
     this.translate = $translate;
     this.languages = ['en', 'ro'];
+    this.menu = [
+        {
+            state : "liveroute",
+            title : "Live route"
+        }
+    ];
 
     this.status = {
      isOpen : false
