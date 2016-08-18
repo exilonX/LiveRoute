@@ -14,8 +14,6 @@ import java.util.Calendar;
  * Created by ubuntu on 12.08.2016.
  */
 public class MyScheduleReceiver extends BroadcastReceiver {
-    // restart service every 30 seconds
-    private static final long REPEAT_TIME = 1000 * 30;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -54,7 +52,7 @@ public class MyScheduleReceiver extends BroadcastReceiver {
         Calendar cal = Calendar.getInstance();
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                cal.getTimeInMillis(), REPEAT_TIME, pending);
+                cal.getTimeInMillis(), Constants.REPEAT_TIME, pending);
     }
 
     public void onReceiveStop(Context context) {
@@ -65,5 +63,6 @@ public class MyScheduleReceiver extends BroadcastReceiver {
 
         alarmManager.cancel(pending);
     }
+
 
 }

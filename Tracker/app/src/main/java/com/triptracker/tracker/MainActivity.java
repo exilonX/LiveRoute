@@ -1,10 +1,16 @@
 package com.triptracker.tracker;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,12 +21,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.PACKAGE_USAGE_STATS;
+import static android.Manifest.permission.READ_CONTACTS;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private MyScheduleReceiver receiver;
     private boolean serviceStarted = false;
+    private static final int REQUEST_CODE_LOCATION = 1;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +79,21 @@ public class MainActivity extends AppCompatActivity
         registerReceiver(receiver, filter);
     }
 
-    public void onClickStart(View v) {
+    public void startLocationTracker() {
         Intent intent = new Intent(Constants.BROADCAST);
         intent.putExtra(Constants.BROADCAST_TYPE, Constants.BROADCAST_START);
         sendBroadcast(intent);
         serviceStarted = true;
         setStopButton();
+    }
+
+    public void onClickStart(View v) {
+        if (checkPermissions()) {
+            startLocationTracker();
+        } else {
+            // Ask the user for permissions
+            Log.d(TAG, "Will ask for permissions");
+        }
     }
 
     public void setStopButton() {
@@ -143,4 +166,42 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    // Permissions
+    public boolean checkPermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return true;
+        }
+
+        if (checkSelfPermission(ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                checkSelfPermission(ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        }
+
+        if (shouldShowRequestPermissionRationale(ACCESS_COARSE_LOCATION) || shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
+            RelativeLayout relativeMain = (RelativeLayout)findViewById(R.id.relativeLayoutMain);
+            Snackbar.make(relativeMain, R.string.permission_location, Snackbar.LENGTH_INDEFINITE)
+                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                        @Override
+                        @TargetApi(Build.VERSION_CODES.M)
+                        public void onClick(View v) {
+                            requestPermissions(new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
+                        }
+                    });
+        } else {
+            requestPermissions(new String[]{ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE_LOCATION) {
+            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                // execute the service
+                startLocationTracker();
+            }
+        }
+    }
 }

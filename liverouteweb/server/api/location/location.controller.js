@@ -22,7 +22,7 @@ function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function (entity) {
     if (entity) {
-      res.status(statusCode).json(entity);
+      return res.status(statusCode).json(entity);
     }
   };
 }
@@ -100,6 +100,8 @@ export function destroy(req, res) {
 
 // ===== Add a location sent from the user
 export function addLocation(req, res) {
+  console.log(req.body);
+  console.log(req.params);
   if (!validation.addLocationValidation(req, res))
     return;
 

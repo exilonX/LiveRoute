@@ -75,8 +75,13 @@ export function computeMetrics(location, info, cb) {
     let end = buildGeolibCoords(info.location);
 
     let distance = geolib.getDistance(start, end);
-    console.log("Geolib distance ", start, end, distance);
-    let totalDistance = location.distance + distance;
+    console.log("Geolib distance ", start, end, distance, location.distance);
+
+    let totalDistance = distance;
+
+    if (location.distance)
+      totalDistance += location.distance;
+
 
     let t0 = (new Date(location.route[0].timestamp)).getTime();
     let totalTime = (new Date(info.timestamp)).getTime() - t0; // time in seconds
