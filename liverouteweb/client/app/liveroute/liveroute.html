@@ -1,3 +1,13 @@
-<ng-map center="" class="liverouteMap">
-
+<!--<ng-map center="" class="liverouteMap">-->
+<ng-map zoom="15" map-type-id="TERRAIN" class="liverouteMap">
+    <shape name="polyline"
+           path="{{$ctrl.mapPath}}"
+           geodesic="true"
+           stroke-color="#FF0000"
+           stroke-opacity="1.0"
+           stroke-weight="2">
+    </shape>
 </ng-map>
+<div>
+    {{$ctrl.mapPath[0][1]}}
+</div>
