@@ -44,9 +44,9 @@ class LiverouteComponent {
     this.$http.get('/api/locations/track/' + this.trackId)
       .then(response => {
         console.log("Response: ", response);
-        this.extractMapData(response.data[0]);
+        //this.extractMapData(response.data[0]);
         this.socket.socket.on('location:update:' + this.trackId, (data) => {
-          //console.log(data);
+          console.log(data);
           this.updateMapData(data);
         });
       });
@@ -85,10 +85,12 @@ class LiverouteComponent {
 
   updateMapData(data) {
     this.updateMapCoords(data.currentLocation);
+    this.setMapCenter(data.currentLocation);
   }
 
   updateMapCoords(coords) {
-    this.mapPath = this.mapPath.concat(coords.loc);
+    console.log("Map coords: ", coords);
+    this.mapPath.push(this.getGoogleMapCoordsFromLocation(coords));
   }
 }
 
