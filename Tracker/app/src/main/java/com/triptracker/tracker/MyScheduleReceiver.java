@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.support.v4.content.WakefulBroadcastReceiver;
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -13,7 +15,9 @@ import java.util.Calendar;
 /**
  * Created by ubuntu on 12.08.2016.
  */
-public class MyScheduleReceiver extends BroadcastReceiver {
+public class MyScheduleReceiver extends WakefulBroadcastReceiver {
+
+    PowerManager.WakeLock wakeLock;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -46,13 +50,16 @@ public class MyScheduleReceiver extends BroadcastReceiver {
     public void onReceiveStart(Context context) {
         Toast.makeText(context, "On receive BroadcastReceiver", Toast.LENGTH_SHORT).show();
 
+//        PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
+//        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "TrackerWakeLock");
+
         AlarmManager alarmManager = getAlarmManager(context);
         PendingIntent pending = getPendingIntent(context);
 
         Calendar cal = Calendar.getInstance();
 
-        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
-                cal.getTimeInMillis(), Constants.REPEAT_TIME, pending);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                cal.getTimeInMillis() + (2 * 1000), Constants.REPEAT_TIME, pending);
     }
 
     public void onReceiveStop(Context context) {

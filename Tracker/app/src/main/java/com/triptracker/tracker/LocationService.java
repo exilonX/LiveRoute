@@ -1,9 +1,11 @@
 package com.triptracker.tracker;
 
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -52,7 +55,7 @@ public class LocationService extends Service {
             } catch (SecurityException ex) {
                 Log.d(TAG, "provider does not exist" + provider + ex.getMessage());
             } catch (IllegalArgumentException ex) {
-                Log.d(TAG, "provider does not exist" + provider +  ex.getMessage());
+                Log.d(TAG, "provider does not exist" + provider + ex.getMessage());
             }
         }
 
@@ -119,54 +122,24 @@ public class LocationService extends Service {
             mLastLocation = new Location(provider);
         }
 
-        /**
-         * Get the best location from two providers - network and gps
-         * @param location1
-         * @param location2
-         * @return the best location based on time and accuracy
-         */
-        public Location bestLocation(Location location1, Location location2) {
-            if (location1 == null)
-                return location2;
-            if (location2 == null)
-                return location1;
-
-            long deltaTime = location1.getTime() - location2.getTime();
-            int deltaAccuracy = (int)(location1.getAccuracy() - location2.getAccuracy());
-
-            if (Math.abs(deltaTime) > Constants.TIME_ACCURACY) {
-                if (deltaTime > 0) {
-                    return location1;
-                } else {
-                    return location2;
-                }
-            } else {
-                if (deltaAccuracy > 0) {
-                    return location1;
-                } else {
-                    return location2;
-                }
-            }
-        }
-
         @Override
         public void onLocationChanged(Location location) {
-            Toast.makeText(getApplicationContext(), "Location " + location.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), provider + " Location " + location.toString(), Toast.LENGTH_LONG).show();
             mLastLocation.set(location);
-            if (mLocationArray.size() > 1) {
-                Toast.makeText(getApplicationContext(), "Location array size > 1 ", Toast.LENGTH_SHORT).show();
-                Location bestLocation = bestLocation(mLocationArray.get(0), location);
-
+            if (!locationSent) {
                 // Create the location update object
                 LocationUpdate locationUpdate = new LocationUpdate
-                        (bestLocation.getLatitude(), bestLocation.getLongitude(), "user1");
+                        (location.getLatitude(), location.getLongitude(), "user1");
 
-                // When the location changes I this is triggered
+                // When the location changes this is triggered
                 LocationUpdateSender locationSender = new LocationUpdateSender(getApplicationContext());
                 locationSender.locationUpdate(locationUpdate);
 
+                // remove the listeners
+                removeUpdates();
+                locationSent = true;
             } else {
-                mLocationArray.add(location);
+                Toast.makeText(getApplicationContext(), provider + " Location already sent", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -190,5 +163,17 @@ public class LocationService extends Service {
     private void initializeLocationManager() {
         if (mLocationManager == null)
             mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    private void removeUpdates() {
+        try {
+            mLocationManager.removeUpdates(mLocationListeners[0]);
+            mLocationManager.removeUpdates(mLocationListeners[1]);
+        } catch (SecurityException ex) {
+            Log.d(TAG, "provider does not exist"  + ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            Log.d(TAG, "provider does not exist" + ex.getMessage());
+        }
+
     }
 }

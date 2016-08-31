@@ -146,7 +146,7 @@ export function addLocation(req, res) {
 
     // An update was made
     // should notify the clients
-    res.status(200).send("Location added");
+    res.status(200).send({response : "Location added"});
   })
 }
 

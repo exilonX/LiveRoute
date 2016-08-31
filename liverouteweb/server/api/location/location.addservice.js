@@ -4,6 +4,7 @@ import Location from './location.model';
 import SnapToRoad from '../../components/osrm/osrm.service';
 import geolib from "geolib";
 
+
 // 1. Check if the location document is created
 export function checkLocationCreated(info, cb) {
   let query = {
@@ -82,10 +83,8 @@ export function computeMetrics(location, info, cb) {
     if (location.distance)
       totalDistance += location.distance;
 
-
     let t0 = (new Date(location.route[0].timestamp)).getTime();
     let totalTime = (new Date(info.timestamp)).getTime() - t0; // time in seconds
-
 
     let avgSpeed = 0;
     if (totalDistance > 0)
@@ -104,7 +103,6 @@ export function computeMetrics(location, info, cb) {
 // 5. Update the document with the new information
 
 export function updateLocation(location, info, cb) {
-  console.log(location);
   location.route.push({
     loc : info.location,
     timestamp : info.timestamp
@@ -114,5 +112,19 @@ export function updateLocation(location, info, cb) {
   location.currentStreetName = info.streetName;
   location.currentTimestamp = info.timestamp;
 
-  location.save(cb);
+  //location.save(cb);
+
+  let query = {
+    trackId : info.trackId,
+    userId : info.userId
+  };
+
+  Location.findOne(query, function(err, dbLocation) {
+    if (err) {
+      return cb(err);
+    }
+
+    var mergedLocation = _.merge(dbLocation, location);
+    mergedLocation.save(cb);
+  });
 }
