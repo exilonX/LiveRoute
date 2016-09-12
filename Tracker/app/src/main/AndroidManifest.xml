@@ -32,7 +32,8 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-        <service android:enabled="true" android:name=".LocationService"></service>
+        <service android:enabled="true" android:name=".LocationService"
+            android:process=":locationservice"/>
 
         <receiver android:name=".MyScheduleReceiver">
             <intent-filter>

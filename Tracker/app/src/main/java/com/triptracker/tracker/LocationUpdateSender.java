@@ -28,7 +28,7 @@ public class LocationUpdateSender {
 
     public void locationUpdate(LocationUpdate location) {
         Log.d(TAG, "Sending a location update");
-        String url = "http://192.168.0.104:9000/api/locations/5774f31b43365a7c749769c1/100";
+        String url = "http://192.168.0.100:9000/api/locations/5774f31b43365a7c749769c1/100";
 
         JSONObject json = new JSONObject(location.mapProperties());
 
